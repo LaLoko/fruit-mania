@@ -1,8 +1,7 @@
 package com.company;
 
-//import javafx.scene.media.*;
-
 import javax.print.attribute.standard.Media;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 class Game extends JFrame{
@@ -51,7 +51,15 @@ class MAIN_WINDOW extends JPanel implements ActionListener {
         setBackground(Color.black);
         score_panel();
         game_panel();
-        music();
+        try {
+            music();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
 
         setFocusable(true);
         load_graphics();
@@ -89,11 +97,11 @@ class MAIN_WINDOW extends JPanel implements ActionListener {
         timer.start();
         add(BorderLayout.CENTER,game_panel);
     }
-    private void music(){
-        //Media media = new Media(new File("music.mp3").toURI().toString());
-        //MediaPlayer mediaPlayer = new MediaPlayer(media);
-        //mediaPlayer.play();
-
+    private void music() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+        AudioInputStream player = AudioSystem.getAudioInputStream(new File("music.wav"));
+        Clip clip = AudioSystem.getClip();
+        clip.open(player);
+        clip.start();
     }
 
 
